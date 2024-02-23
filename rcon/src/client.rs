@@ -1,5 +1,5 @@
 
-use tokio::{io::{ReadHalf, WriteHalf}, net::TcpStream, sync::Mutex};
+use tokio::{io::{AsyncWriteExt, ReadHalf, WriteHalf}, net::TcpStream, sync::Mutex};
 use anyhow::Result;
 
 use crate::{packet::Packet, serialize::{Decode, Encode, IoReader, IoWriter}};
@@ -35,6 +35,8 @@ impl RconClient {
         let stream: &mut WriteHalf<TcpStream> = &mut *stream_guard;
         let mut writer = IoWriter::new(stream);
         packet.encode(&mut writer).await?;
+        let stream = writer.into_inner();
+        stream.flush().await?;
         Ok(())
     }
 }

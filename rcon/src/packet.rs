@@ -64,15 +64,20 @@ impl Encode for Packet {
 
 impl Decode for Packet {
     async fn decode(decoder: &mut impl Decoder) -> Result<Self> {
+        trace!("decoding packet");
         let size = i32::decode(decoder).await?;
+        trace!("size: {}", size);
         let id = i32::decode(decoder).await?;
+        trace!("id: {}", id);
         let r#type = i32::decode(decoder).await?;
         let r#type: PacketType = r#type.try_into()?;
+        trace!("type: {:?}", r#type);
         // without id, type and an empty string
         let body_size = size - (8 + 1);
         if body_size <= 0 || body_size >= 4096 {
             bail!("broken packet: invalid size")
         }
+        trace!("reading body {} bytes", body_size);
         let body_size = body_size as usize;
         // body string
         let mut body: Vec<u8> = vec![0u8; body_size];
