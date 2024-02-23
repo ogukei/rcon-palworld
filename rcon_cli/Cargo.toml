@@ -1,0 +1,29 @@
+[package]
+name = "rcon_cli"
+version = "0.1.0"
+edition = "2021"
+description = "a simple rcon client"
+license = "MIT"
+authors = ["Keitaro Oguri <ogukei256@gmail.com>"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.79"
+env_logger = "0.11.2"
+log = "0.4.20"
+rcon = { path = "../rcon" }
+tokio = { version = "1.36.0", features = ["rt-multi-thread", "macros", "net", "io-util", "time"] }
+tokio-util = { version = "0.7.10", features = ["io", "io-util"] }
+
+[package.metadata.deb]
+maintainer-scripts = "distribution/debian/"
+systemd-units = { enable = false }
+depends = "$auto"
+section = "utility"
+priority = "optional"
+conf-files = ["/usr/local/etc/rcon-cli.ini"]
+assets = [
+    ["target/release/rcon_cli", "/usr/bin/", "755"],
+    ["distribution/config/rcon-cli.ini", "/usr/local/etc/", "644"],
+]

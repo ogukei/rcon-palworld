@@ -1,0 +1,10 @@
+
+[Unit]
+Description=rcon client
+
+[Service]
+EnvironmentFile=/usr/local/etc/rcon-cli.ini
+ExecStart=/usr/bin/rcon_cli
+
+[Install]
+WantedBy=multi-user.target
