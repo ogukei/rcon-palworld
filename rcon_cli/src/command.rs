@@ -49,10 +49,9 @@ pub async fn fetch_current_players() -> Result<Vec<Player>> {
 pub async fn execute_command(command: &str) -> Result<String> {
     let client = negotiate().await?;
     let command_request = Packet::new(0, PacketType::EXEC_COMMAND, command.into())?;
-    let (response, write_result) = tokio::join!(next_response_with_timeout(&client, Duration::from_secs(3)),
-        client.write_packet(command_request));
-    write_result?;
-    let body = response?.body()?;
+    client.write_packet(command_request).await?;
+    let response = next_response_with_timeout(&client, Duration::from_secs(3)).await?;
+    let body = response.body()?;
     Ok(body)
 }
 
