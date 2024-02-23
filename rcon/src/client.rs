@@ -1,5 +1,5 @@
 
-use tokio::{io::{AsyncWriteExt, ReadHalf, WriteHalf}, net::{tcp::{OwnedReadHalf, OwnedWriteHalf}, TcpStream}, sync::Mutex};
+use tokio::{io::{AsyncWriteExt, BufWriter, ReadHalf, WriteHalf}, net::{tcp::{OwnedReadHalf, OwnedWriteHalf}, TcpStream}, sync::Mutex};
 use anyhow::Result;
 
 use crate::{packet::Packet, serialize::{Decode, Encode, IoReader, IoWriter}};
@@ -35,10 +35,11 @@ impl RconClient {
         let mut stream_guard = self.write_stream.lock().await;
         let stream: &mut OwnedWriteHalf = &mut *stream_guard;
         stream.writable().await?;
-        let mut writer = IoWriter::new(stream);
+        let buffer = BufWriter::new(stream);
+        let mut writer = IoWriter::new(buffer);
         packet.encode(&mut writer).await?;
-        let stream = writer.into_inner();
-        stream.flush().await?;
+        let mut buffer = writer.into_inner();
+        buffer.flush().await?;
         Ok(())
     }
 }
