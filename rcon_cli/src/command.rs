@@ -102,6 +102,7 @@ async fn next_response_with_timeout(client: &RconClient, duration: Duration) -> 
 async fn next_response(client: &RconClient) -> Result<Packet> {
     trace!("awaiting response");
     let response_value = loop {
+        // the server-side packet size calculation will be broken when a packet contains a non-ascii character
         let packet = client.read_packet_ignoring_size().await?;
         trace!("{:?}", packet);
         if packet.r#type() == PacketType::RESPONSE_VALUE {

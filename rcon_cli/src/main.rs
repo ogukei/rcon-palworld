@@ -10,7 +10,7 @@ mod command;
 mod player;
 mod observer;
 
-use crate::observer::PlayersObserver;
+use crate::{command::say, observer::PlayersObserver};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -21,6 +21,7 @@ async fn main() -> Result<()> {
 
 async fn runloop() -> Result<()> {
     info!("started");
+    say("Hello world!").await?;
     let mut observer = PlayersObserver::new();
     loop {
         observer.check().await?;
