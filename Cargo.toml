@@ -1,6 +1,5 @@
 [workspace]
 members = [
     "rcon_cli",
-    "rcon",
 ]
 resolver = "2"
