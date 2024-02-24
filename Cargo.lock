@@ -258,8 +258,8 @@ dependencies = [
 
 [[package]]
 name = "rcon"
-version = "0.1.0"
-source = "git+https://github.com/ogukei/rcon-rs.git#03593d2dbfb022a7f97b527b5b26d39236ea2800"
+version = "0.1.1"
+source = "git+https://github.com/ogukei/rcon-rs.git#f3bf86e57dd0083e11ce5da3e3991d26e1a4b95d"
 dependencies = [
  "anyhow",
  "log",

@@ -102,7 +102,7 @@ async fn next_response_with_timeout(client: &RconClient, duration: Duration) -> 
 async fn next_response(client: &RconClient) -> Result<Packet> {
     trace!("awaiting response");
     let response_value = loop {
-        let packet = client.read_packet().await?;
+        let packet = client.read_packet_ignoring_size().await?;
         trace!("{:?}", packet);
         if packet.r#type() == PacketType::RESPONSE_VALUE {
             break packet
