@@ -21,7 +21,6 @@ async fn main() -> Result<()> {
 
 async fn runloop() -> Result<()> {
     info!("started");
-    say("Hello world!").await?;
     let mut observer = PlayersObserver::new();
     loop {
         observer.check().await?;
